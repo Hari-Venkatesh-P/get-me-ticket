@@ -1,0 +1,33 @@
+.avatar {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 2rem;
+  background-color: rgb(179, 211, 239);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.avatar-parent-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+.avatar-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  max-width: 5rem;
+  margin-right: 1rem;
+}
+
+.rating-container {
+  padding: 0.5rem;
+  border-color: rgb(179, 211, 239);
+  border-style: solid;
+  border-radius: 5rem;
+  margin-top: 1rem;
+  margin-right: 1rem;
+}
