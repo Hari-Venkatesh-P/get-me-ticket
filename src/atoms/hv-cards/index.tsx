@@ -14,7 +14,6 @@ interface HVCardProps {
   cardTitle?: string;
   cardSubTitle?: string;
   cardBodyText?: string;
-  cardFooterContentBuilder?: () => React.Component;
   onCardPress?: (id: string) => void;
   isCardFooterRequired?: boolean;
 }
@@ -27,7 +26,6 @@ export default function HVCard(props: HVCardProps) {
     cardTitle = "",
     cardSubTitle = "",
     cardBodyText = "",
-    cardFooterContentBuilder = () => <React.Fragment />,
     onCardPress = (_) => {},
     isCardFooterRequired = true,
   } = props;

@@ -1,6 +1,7 @@
 import { GET, RANK } from "./constansts";
 
 export function validateQuery(inputString: string) {
+  if (inputString.length === 0) return;
   const regex = /^(\w+):(.*)$/;
   const match = inputString.match(regex);
   let result;
@@ -28,6 +29,6 @@ export function validateQuery(inputString: string) {
       }
     }
     result = { operation, values: keyValuePairs };
-  } 
+  }
   return result;
 }

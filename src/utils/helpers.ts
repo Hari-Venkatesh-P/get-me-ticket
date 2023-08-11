@@ -1,19 +1,13 @@
-import { Movie, MovieGroup, Query } from "../models/movie.models";
+import { Movie, Query } from "../models/movie.models";
 import { convertMovieListToMovieGroupList } from "./converter";
 
-export function handleValidGetQuery(
-  stateData: MovieGroup[],
-  formattedQuery: any
-) {
-  let flattenedList: Movie[] = [];
-  stateData.forEach((group) => {
-    flattenedList.push(...Object.values(group));
-  });
+export function handleValidGetQuery(stateData: Movie[], formattedQuery: any) {
+  let flattenedList: Movie[] = [...stateData];
   const checkFilterCondition = (queryValues: Query[], element: Movie) => {
     return queryValues.every((query: Query) => {
       return element[query.key].toString().includes(",")
         ? element[query.key].toString().toLowerCase().includes(query.value)
-        : element[query.key].toString().toLowerCase() == query.value;
+        : element[query.key].toString().toLowerCase() === query.value;
     });
   };
   let filteredResuts = flattenedList.filter((element) =>
@@ -22,19 +16,13 @@ export function handleValidGetQuery(
   return convertMovieListToMovieGroupList(filteredResuts);
 }
 
-export function handleValidRankQuery(
-  stateData: MovieGroup[],
-  formattedQuery: any
-) {
-  let flattenedList: Movie[] = [];
-  stateData.forEach((group) => {
-    flattenedList.push(...Object.values(group));
-  });
+export function handleValidRankQuery(stateData: Movie[], formattedQuery: any) {
+  let flattenedList: Movie[] = [...stateData];
   formattedQuery.values = formattedQuery.values.sort(function (
     a: Query,
     b: Query
   ) {
-    return parseInt(b.value) - parseInt(a.value);
+    return parseInt(a.value) - parseInt(b.value);
   });
   const movieTitles = formattedQuery.values.map((ele: Query) =>
     ele.key.toLocaleLowerCase()
@@ -47,17 +35,18 @@ export function handleValidRankQuery(
   movieTitles.forEach((title: string) => {
     curMovie = flattenedList.find(
       (movie) =>
-        movie.title?.toString().toLocaleLowerCase() ==
+        movie.title?.toString().toLocaleLowerCase() ===
         title?.toString().toLocaleLowerCase()
     );
     index =
-      formattedQuery.values.find((q: Query) => q.key == title)?.value || -1;
-    if (curMovie && index != -1) {
+      formattedQuery.values.find((q: Query) => q.key === title)?.value || -1;
+    if (curMovie && index !== -1) {
       updatedResults = [
-        ...updatedResults.slice(0, index - 1),
+        ...updatedResults.slice(0, index-1),
         curMovie,
-        ...updatedResults.slice(index - 1),
+        ...updatedResults.slice(index-1),
       ];
+      console.log({updatedResults})
       index = -1;
     }
   });

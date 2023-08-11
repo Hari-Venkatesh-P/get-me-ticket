@@ -1,48 +1,65 @@
 import { useCallback, useEffect, useState } from "react";
 import MovieCarousel from "../../components/movie-carousel";
 import MovieDetailModal from "../../components/movie-detail-modal";
-import { MovieDetail, MovieGroup } from "../../models/movie.models";
-import { getMovieData, getMovieDetails } from "../../utils/converter";
+import { MovieGroup } from "../../models/movie.models";
+import {
+  convertMovieListToMovieGroupList,
+  getMovieDataList,
+  getMovieDetails,
+} from "../../utils/converter";
 import debounce from "lodash.debounce";
 import "./styles.css";
 import { validateQuery } from "../../utils/validators";
-import {
-  handleValidGetQuery,
-  handleValidRankQuery,
-} from "../../utils/helpers";
+import { handleValidGetQuery, handleValidRankQuery } from "../../utils/helpers";
 import InputAdornment from "@mui/material/InputAdornment";
 import TextField from "@mui/material/TextField";
 import { GET } from "../../utils/constansts";
 import { IconButton } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Clear";
+import { useDispatch, useSelector } from "react-redux";
+import { updateMovieDetails, updateMovieList } from "../../redux/actions";
+import { initialReducerState } from "../../redux/reducer";
 
 function LandingScreen() {
-  const [movieDetails, setMoviewDetails] = useState<MovieDetail | null>(null);
+  const dispatch = useDispatch();
 
   const [query, setQuery] = useState<string>("");
-
-  const [stateData, setStateData] = useState<MovieGroup[]>([]);
-
   const [data, setData] = useState<MovieGroup[]>([]);
 
+  const movieList = useSelector(
+    (state: initialReducerState) => state.movieList
+  );
+
+  const movieDetails = useSelector(
+    (state: initialReducerState) => state.movieDetails
+  );
+
   useEffect(() => {
-    setStateData([...getMovieData()]);
-    setData([...getMovieData()]);
+    dispatch(updateMovieList(getMovieDataList()));
   }, []);
 
+  useEffect(() => {
+    const res = validateQuery(query);
+    if (res) {
+      handleValidQuery(res);
+    } else {
+      setData(convertMovieListToMovieGroupList(movieList));
+    }
+  }, [movieList, query]);
+
   const onMoviewPress = useCallback((id: string) => {
-    setMoviewDetails(getMovieDetails(id));
+    dispatch(updateMovieDetails(getMovieDetails(id)));
   }, []);
 
   const handleValidQuery = useCallback(
     (formattedQuery: any) => {
       if (formattedQuery.operation == GET) {
-        setData([...handleValidGetQuery(stateData, formattedQuery)]);
+        setData([...handleValidGetQuery(movieList, formattedQuery)]);
       } else {
-        setData([...handleValidRankQuery(stateData, formattedQuery)]);
+        setData([...handleValidRankQuery(movieList, formattedQuery)]);
       }
     },
-    [data, stateData]
+    [data, movieList]
   );
 
   const clearQuery = useCallback(() => {
@@ -52,14 +69,8 @@ function LandingScreen() {
   const debouncedFilter = useCallback(
     debounce((query) => {
       setQuery(query);
-      const res = validateQuery(query);
-      if (res) {
-        handleValidQuery(res);
-      } else {
-        setData(stateData);
-      }
     }, 50),
-    [stateData]
+    []
   );
 
   return (
@@ -91,7 +102,7 @@ function LandingScreen() {
       {movieDetails != null && (
         <MovieDetailModal
           {...movieDetails}
-          onModalClose={() => setMoviewDetails(null)}
+          onModalClose={() => dispatch(updateMovieDetails(null))}
         />
       )}
     </>

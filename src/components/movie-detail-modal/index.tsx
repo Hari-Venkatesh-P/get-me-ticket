@@ -1,4 +1,4 @@
-import { ReactNode, useCallback, useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import HVModal from "../../atoms/hv-modals";
 import { MovieDetail } from "../../models/movie.models";
 import Typography from "@mui/material/Typography";

@@ -32,22 +32,17 @@ export function convertRawDataIntoMovieDetail(rawData: any) {
   } as MovieDetail;
 }
 
-export function getMovieData() {
-  const data: MovieGroup[] = [];
-  for (let index = 0; index < 12; index = index + 4) {
-    data.push({
-      movieW: convertRawDataIntoMovie(dummyData[index]),
-      movieX: convertRawDataIntoMovie(dummyData[index + 1]),
-      movieY: convertRawDataIntoMovie(dummyData[index + 2]),
-      movieZ: convertRawDataIntoMovie(dummyData[index + 3]),
-    } as MovieGroup);
+export function getMovieDataList() {
+  const data: Movie[] = [];
+  for (let index = 0; index < 12; index++) {
+    data.push(convertRawDataIntoMovie(dummyData[index]));
   }
   return data;
 }
 
 export function getMovieDetails(id: string) {
   let result = null;
-  const filteredData = dummyData.find((ele) => ele["Id"] == id);
+  const filteredData = dummyData.find((ele) => ele["Id"] === id);
   result = convertRawDataIntoMovieDetail(filteredData);
   return result;
 }
