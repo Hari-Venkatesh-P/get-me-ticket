@@ -10,7 +10,11 @@ import {
 import debounce from "lodash.debounce";
 import "./styles.css";
 import { validateQuery } from "../../utils/validators";
-import { handleValidGetQuery, handleValidRankQuery } from "../../utils/helpers";
+import {
+  constructQueryString,
+  handleValidGetQuery,
+  handleValidRankQuery,
+} from "../../utils/helpers";
 import InputAdornment from "@mui/material/InputAdornment";
 import TextField from "@mui/material/TextField";
 import { GET } from "../../utils/constansts";
@@ -41,6 +45,11 @@ function LandingScreen() {
   useEffect(() => {
     const res = validateQuery(query);
     if (res) {
+      window.history.pushState(
+        {},
+        "",
+        window.location.href + "?" + constructQueryString(res)
+      );
       handleValidQuery(res);
     } else {
       setData(convertMovieListToMovieGroupList(movieList));
@@ -64,6 +73,7 @@ function LandingScreen() {
 
   const clearQuery = useCallback(() => {
     setQuery("");
+    window.history.pushState({}, "", window.location.href);
   }, []);
 
   const debouncedFilter = useCallback(

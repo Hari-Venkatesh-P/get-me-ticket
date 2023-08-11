@@ -42,13 +42,24 @@ export function handleValidRankQuery(stateData: Movie[], formattedQuery: any) {
       formattedQuery.values.find((q: Query) => q.key === title)?.value || -1;
     if (curMovie && index !== -1) {
       updatedResults = [
-        ...updatedResults.slice(0, index-1),
+        ...updatedResults.slice(0, index - 1),
         curMovie,
-        ...updatedResults.slice(index-1),
+        ...updatedResults.slice(index - 1),
       ];
-      console.log({updatedResults})
+      console.log({ updatedResults });
       index = -1;
     }
   });
   return convertMovieListToMovieGroupList(updatedResults);
+}
+
+export function constructQueryString(query: any) {
+  const queryArray = query.values;
+  const params: any = {};
+  queryArray.forEach((element: Query) => {
+    params[element.key] = element.value;
+  });
+  return Object.keys(params)
+    .map((key) => key + "=" + params[key])
+    .join("&");
 }

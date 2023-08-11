@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import LandingScreen from "../../screens/landing";
-import PageNotFound from "./pagenotfound";
+import PageNotFound from "../../screens/pagenotfound/pagenotfound";
 
 function Navigation() {
   return (
