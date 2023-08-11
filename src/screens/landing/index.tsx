@@ -6,7 +6,10 @@ import { getMovieData, getMovieDetails } from "../../utils/converter";
 import debounce from "lodash.debounce";
 import "./styles.css";
 import { validateQuery } from "../../utils/validators";
-import { handleValidGetQuery, handleValidRankQuery } from "../../utils/helpers";
+import {
+  handleValidGetQuery,
+  handleValidRankQuery,
+} from "../../utils/helpers";
 import InputAdornment from "@mui/material/InputAdornment";
 import TextField from "@mui/material/TextField";
 import { GET } from "../../utils/constansts";
@@ -42,6 +45,10 @@ function LandingScreen() {
     [data, stateData]
   );
 
+  const clearQuery = useCallback(() => {
+    setQuery("");
+  }, []);
+
   const debouncedFilter = useCallback(
     debounce((query) => {
       setQuery(query);
@@ -70,7 +77,7 @@ function LandingScreen() {
             endAdornment:
               query.length > 0 ? (
                 <InputAdornment position="end">
-                  <IconButton aria-label="Clear" onClick={() => setQuery("")}>
+                  <IconButton aria-label="Clear" onClick={() => clearQuery()}>
                     <DeleteIcon />
                   </IconButton>
                 </InputAdornment>
@@ -81,7 +88,12 @@ function LandingScreen() {
         />
       </div>
       <MovieCarousel onMovieCardPress={onMoviewPress} data={data} />
-      {movieDetails != null && <MovieDetailModal {...movieDetails} />}
+      {movieDetails != null && (
+        <MovieDetailModal
+          {...movieDetails}
+          onModalClose={() => setMoviewDetails(null)}
+        />
+      )}
     </>
   );
 }
