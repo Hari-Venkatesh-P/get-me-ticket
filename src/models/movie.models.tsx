@@ -3,17 +3,18 @@ export interface Movie {
   title: string;
   genre: string;
   posterURL: string;
+  year: string;
+  rated: string;
 }
 
 export interface MovieGroup {
   movieW: Movie;
-  movieX: Movie;
-  movieY: Movie;
-  movieZ: Movie;
+  movieX?: Movie;
+  movieY?: Movie;
+  movieZ?: Movie;
 }
 
 export interface MovieDetail extends Movie {
-  rated: string;
   released: string;
   runtime: string;
   director: string;
@@ -22,5 +23,10 @@ export interface MovieDetail extends Movie {
   actors: string;
   language: string;
   country: string;
-  ratings : []
+  ratings: [];
+}
+
+export interface Query {
+  key: "rated" | "year" | "genre";
+  value: string;
 }

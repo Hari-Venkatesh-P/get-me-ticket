@@ -2,17 +2,16 @@ import MovieCard from "../movie-card";
 import HVCarousel from "../../atoms/hv-carousel";
 import { useCallback } from "react";
 import { MovieGroup } from "../../models/movie.models";
-import { getMovieData } from "../../utils/converter";
 
 interface MovieCarouselProps {
+  data: MovieGroup[];
   onMovieCardPress: (movieId: string) => void;
 }
 
 function MovieCarousel(props: MovieCarouselProps) {
   // Dummy Data
-  const data = getMovieData() || [];
-  
-  const { onMovieCardPress = (_: string) => {} } = props;
+
+  const { onMovieCardPress = (_: string) => {}, data } = props;
   const renderGroup = useCallback((currentGroup: MovieGroup) => {
     return (
       <>
@@ -22,28 +21,43 @@ function MovieCarousel(props: MovieCarouselProps) {
           genre={currentGroup.movieW.genre}
           posterURL={currentGroup.movieW.posterURL}
           onCardPress={onMovieCardPress}
+          year={currentGroup.movieW.year}
+          rated={currentGroup.movieW.rated}
         />
-        <MovieCard
-          id={currentGroup.movieX.id}
-          title={currentGroup.movieX.title}
-          genre={currentGroup.movieX.genre}
-          posterURL={currentGroup.movieX.posterURL}
-          onCardPress={onMovieCardPress}
-        />
-        <MovieCard
-          id={currentGroup.movieY.id}
-          title={currentGroup.movieY.title}
-          genre={currentGroup.movieY.genre}
-          posterURL={currentGroup.movieY.posterURL}
-          onCardPress={onMovieCardPress}
-        />
-        <MovieCard
-          id={currentGroup.movieZ.id}
-          title={currentGroup.movieZ.title}
-          genre={currentGroup.movieZ.genre}
-          posterURL={currentGroup.movieZ.posterURL}
-          onCardPress={onMovieCardPress}
-        />
+        {currentGroup?.movieX && (
+          <MovieCard
+            id={currentGroup?.movieX.id}
+            title={currentGroup?.movieX.title}
+            genre={currentGroup?.movieX.genre}
+            posterURL={currentGroup?.movieX.posterURL}
+            onCardPress={onMovieCardPress}
+            year={currentGroup?.movieX.year}
+            rated={currentGroup?.movieX.rated}
+          />
+        )}
+        {currentGroup?.movieY && (
+          <MovieCard
+            id={currentGroup.movieY.id}
+            title={currentGroup.movieY.title}
+            genre={currentGroup.movieY.genre}
+            posterURL={currentGroup.movieY.posterURL}
+            onCardPress={onMovieCardPress}
+            year={currentGroup.movieY.year}
+            rated={currentGroup.movieY.rated}
+          />
+        )}
+
+        {currentGroup?.movieZ && (
+          <MovieCard
+            id={currentGroup.movieZ.id}
+            title={currentGroup.movieZ.title}
+            genre={currentGroup.movieZ.genre}
+            posterURL={currentGroup.movieZ.posterURL}
+            onCardPress={onMovieCardPress}
+            year={currentGroup.movieZ.year}
+            rated={currentGroup.movieZ.rated}
+          />
+        )}
       </>
     );
   }, []);
